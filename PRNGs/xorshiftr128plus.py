@@ -1,4 +1,5 @@
 import time
+import numpy as np
 
 class Xorshiftr128Plus:
     def __init__(self, seed: int, seed2: int):
@@ -73,7 +74,28 @@ if __name__ == "__main__":
             start = time.time()
             number = xorshiftr128plus.randbits(nbits)
             end = time.time()
-            total_time += (end - start)
 
-        avg_time = (total_time / 10) * 1000
-        print(f"Generation time for {nbits} bits: {avg_time:.6f}\n")
+            gen_time = (end - start) * 1000
+            print(f"Generated {nbits}-bit number: {number} in {gen_time:.6f} ms")
+
+            total_time += gen_time
+
+        avg_time = total_time / 10
+        print(f"Generation time for {nbits} bits: {avg_time:.6f} ms\n")
+
+    # Verify the uniformity of the generated bits using a simple frequency test
+    bits = []
+    for _ in range(100000):
+        num = xorshiftr128plus.randbits(64)
+        bits.extend([int(b) for b in bin(num)[2:].zfill(64)])
+
+    zeros = bits.count(0)
+    ones = bits.count(1)
+
+    total = zeros + ones
+    expected = total / 2
+    chi2 = ((zeros - expected)**2 + (ones - expected)**2) / expected
+    p_value = np.exp(-chi2/2)
+
+    print("Frequency Test:")
+    print(f"0s: {zeros}, 1s: {ones}, Chi2: {chi2:.2f}, p-value ~ {p_value:.4f}\n")
