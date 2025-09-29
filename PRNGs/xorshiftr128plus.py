@@ -68,7 +68,7 @@ if __name__ == "__main__":
 
     # Test generation times for various bit sizes
     for nbits in [40, 56, 80, 128, 168, 224, 256, 512, 1024, 2048, 4096]:
-        # Generate 10 random nubmer for each bit size and average the time taken
+        # Generate 10 random numbers for each bit size and average the time taken
         total_time = 0.0
         for _ in range(10):
             start = time.time()
